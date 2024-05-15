@@ -42,12 +42,11 @@ const create = async()=>{
         if(!data){
             throw { msg: 'No se pudo obtener datos!'};
         }
-        console.log({id: uuidv4(),name: data.results[0].name.first+' '+data.results[0].name.last,debit: 0 , income: 9999 })
         jsonData.push({id: uuidv4(),name: data.results[0].name.first+' '+data.results[0].name.last,debit: 0 , income: 9999 })
 
         await writeFile(path.join(__dirname, '../data/roommates.json'), JSON.stringify(jsonData));
 
-        return jsonData.last();
+        return jsonData[jsonData.length-1];
     } catch (error) {
         throw { error };
     }

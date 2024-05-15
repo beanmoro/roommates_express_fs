@@ -73,17 +73,31 @@ const update = async(id, { roommate_id, comment, amount})=>{
         const roommateData = JSON.parse(roommatefile);
 
         let old_amount = 0;
+        let old_roommate = "";
+        let roommate_changed = false
+
+        
 
         gastosData.forEach(e => {
             if(parseInt(e.id)  === parseInt(id)){
+
+                if(e.roommate_id != roommate_id){
+                    old_roommate = e.roommate_id;
+                    roommate_changed = true;
+                }
+
+
                 old_amount = e.amount
                 Object.assign(e, {roommate_id, comment, amount})
             }
         });
 
         roommateData.forEach(e => {
-            if(e.id  === roommate_id){
+
+            if( e.roommate_id === old_roommate || (!roommate_changed && e.roommate_id === roommate_id)){
                 Object.assign(e, {debit: parseInt(e.debit)-parseInt(old_amount)})
+            }
+            if(e.id  === roommate_id){
                 Object.assign(e, {debit: parseInt(e.debit)+parseInt(amount)})
             }
         });
